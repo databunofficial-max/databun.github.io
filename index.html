@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DataBun — 일상을 더 스마트하게</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy:   #0A1F44;
+      --navy2:  #0F2D6B;
+      --blue:   #2B6BD6;
+      --blue2:  #4D87E8;
+      --rose:   #FB7185;
+      --green:  #059669;
+      --white:  #FFFFFF;
+      --gray50: #F8FAFC;
+      --gray100:#E8EEF8;
+      --gray400:#94A3B8;
+      --gray600:#475569;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', 'Noto Sans KR', sans-serif;
+      background: var(--white);
+      color: var(--navy);
+      overflow-x: hidden;
+    }
+
+    /* ── 네비게이션 ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(10, 31, 68, 0.96);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-size: 22px; font-weight: 700; color: var(--white);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--rose); }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.7); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    /* ── 히어로 ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 60%, #1A3A8A 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(43,107,214,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -150px; left: -150px;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(251,113,133,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 720px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(43,107,214,0.2); border: 1px solid rgba(43,107,214,0.4);
+      border-radius: 100px; padding: 8px 20px; margin-bottom: 32px;
+      font-size: 13px; color: #7AADF0; font-weight: 500;
+    }
+    .hero-badge::before { content: '✦'; color: var(--rose); }
+    h1 {
+      font-size: clamp(40px, 7vw, 72px);
+      font-weight: 700; color: var(--white);
+      line-height: 1.1; letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+    h1 .accent { color: var(--rose); }
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7; margin-bottom: 48px;
+      font-weight: 300;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--blue); color: var(--white);
+      padding: 16px 32px; border-radius: 100px;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 32px rgba(43,107,214,0.4);
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(43,107,214,0.5);
+    }
+
+    /* ── 앱 섹션 ── */
+    .apps {
+      padding: 120px 48px;
+      background: var(--gray50);
+    }
+    .section-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 3px;
+      color: var(--blue); text-transform: uppercase; margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700; color: var(--navy);
+      letter-spacing: -1px; margin-bottom: 16px; line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 16px; color: var(--gray600);
+      line-height: 1.7; max-width: 480px; font-weight: 300;
+    }
+    .apps-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 32px; margin-top: 64px;
+      max-width: 1100px; margin-left: auto; margin-right: auto;
+    }
+    .app-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 48px;
+      border: 1px solid var(--gray100);
+      box-shadow: 0 4px 24px rgba(10,31,68,0.06);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .app-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(10,31,68,0.12);
+    }
+    .app-card.featured {
+      grid-column: 1 / -1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+      align-items: center;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+      border: none;
+    }
+    .app-card.featured::before {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(43,107,214,0.3) 0%, transparent 70%);
+    }
+    .app-icon {
+      width: 64px; height: 64px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin-bottom: 24px;
+    }
+    .app-icon.blue { background: rgba(43,107,214,0.12); }
+    .app-icon.rose { background: rgba(251,113,133,0.12); }
+    .app-name {
+      font-size: 24px; font-weight: 700; margin-bottom: 8px;
+      color: var(--navy);
+    }
+    .app-card.featured .app-name { color: var(--white); }
+    .app-tagline {
+      font-size: 14px; color: var(--blue); font-weight: 600;
+      margin-bottom: 16px; letter-spacing: 0.5px;
+    }
+    .app-card.featured .app-tagline { color: #7AADF0; }
+    .app-desc {
+      font-size: 15px; color: var(--gray600);
+      line-height: 1.7; font-weight: 300;
+    }
+    .app-card.featured .app-desc { color: rgba(255,255,255,0.7); }
+
+    .features-list {
+      display: flex; flex-direction: column; gap: 16px; margin-top: 32px;
+    }
+    .feature-item {
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .feature-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(43,107,214,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0; margin-top: 2px;
+    }
+    .feature-text { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+    .feature-text strong { color: var(--white); font-weight: 600; }
+
+    .coming-soon-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(251,113,133,0.15); border: 1px solid rgba(251,113,133,0.3);
+      border-radius: 100px; padding: 6px 14px; margin-top: 24px;
+      font-size: 12px; color: var(--rose); font-weight: 600;
+    }
+
+    .placeholder-card {
+      background: var(--white);
+      border-radius: 24px; padding: 48px;
+      border: 2px dashed var(--gray100);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; gap: 16px;
+      min-height: 280px;
+    }
+    .placeholder-icon {
+      font-size: 40px; opacity: 0.3;
+    }
+    .placeholder-text {
+      font-size: 15px; color: var(--gray400); font-weight: 400;
+    }
+
+    /* ── 가치 섹션 ── */
+    .values {
+      padding: 120px 48px;
+      background: var(--white);
+      max-width: 1100px; margin: 0 auto;
+    }
+    .values-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 40px; margin-top: 64px;
+    }
+    .value-item { text-align: center; }
+    .value-num {
+      font-size: 48px; font-weight: 700;
+      color: var(--blue); letter-spacing: -2px; line-height: 1;
+      margin-bottom: 8px;
+    }
+    .value-label {
+      font-size: 15px; color: var(--gray600); font-weight: 400;
+    }
+
+    /* ── 연락처 ── */
+    .contact {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+      padding: 120px 48px; text-align: center;
+    }
+    .contact h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700; color: var(--white);
+      letter-spacing: -1px; margin-bottom: 16px;
+    }
+    .contact p {
+      font-size: 16px; color: rgba(255,255,255,0.6);
+      margin-bottom: 40px; font-weight: 300;
+    }
+    .contact-email {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px; padding: 16px 32px;
+      font-size: 16px; color: var(--white); text-decoration: none;
+      font-weight: 500; transition: background 0.2s;
+    }
+    .contact-email:hover { background: rgba(255,255,255,0.14); }
+
+    /* ── 푸터 ── */
+    footer {
+      background: #060F22;
+      padding: 40px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo {
+      font-size: 18px; font-weight: 700; color: var(--white);
+    }
+    .footer-logo span { color: var(--rose); }
+    .footer-copy {
+      font-size: 13px; color: rgba(255,255,255,0.3);
+    }
+
+    /* ── 반응형 ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .apps { padding: 80px 24px; }
+      .apps-grid { grid-template-columns: 1fr; }
+      .app-card.featured { grid-column: 1; grid-template-columns: 1fr; }
+      .values { padding: 80px 24px; }
+      .values-grid { grid-template-columns: 1fr; gap: 32px; }
+      .contact { padding: 80px 24px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+    }
+
+    /* ── 애니메이션 ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content > * {
+      animation: fadeUp 0.7s ease both;
+    }
+    .hero-badge { animation-delay: 0.1s; }
+    h1 { animation-delay: 0.2s; }
+    .hero-sub { animation-delay: 0.3s; }
+    .hero-cta { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav>
+  <div class="nav-logo">Data<span>Bun</span></div>
+  <div class="nav-links">
+    <a href="#apps">앱</a>
+    <a href="#values">소개</a>
+    <a href="#contact">문의</a>
+  </div>
+</nav>
+
+<!-- 히어로 -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">DataBun Official</div>
+    <h1>일상을<br/><span class="accent">더 스마트하게</span></h1>
+    <p class="hero-sub">
+      DataBun은 사람들의 일상을 더 편리하고<br/>
+      의미 있게 만드는 앱을 개발합니다.
+    </p>
+    <a href="#apps" class="hero-cta">
+      ✦ 앱 살펴보기
+    </a>
+  </div>
+</section>
+
+<!-- 앱 섹션 -->
+<section class="apps" id="apps">
+  <div style="max-width:1100px; margin:0 auto;">
+    <p class="section-label">Our Apps</p>
+    <h2 class="section-title">DataBun이 만든 앱</h2>
+    <p class="section-sub">사용자의 필요에서 출발해 꼭 필요한 기능만 담았어요.</p>
+
+    <div class="apps-grid">
+      <!-- MamyCare 메인 카드 -->
+      <div class="app-card featured">
+        <div style="position:relative; z-index:1;">
+          <div class="app-icon blue" style="background:rgba(43,107,214,0.2);">🤰</div>
+          <div class="app-name">MamyCare</div>
+          <div class="app-tagline">임신부터 육아까지, AI가 함께해요</div>
+          <p class="app-desc">
+            임산부를 위한 AI 기반 맞춤형 케어 앱이에요.
+            임신 주수에 맞는 건강 정보, 검진 일정 관리,
+            기분·체중·태동 기록, 병원·제품 추천까지
+            임신 기간 동안 필요한 모든 것을 한 곳에서.
+          </p>
+          <div class="features-list">
+            <div class="feature-item">
+              <div class="feature-icon">✦</div>
+              <div class="feature-text"><strong>AI Care</strong> — 주수별 맞춤 건강 메시지와 질문 답변</div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">📋</div>
+              <div class="feature-text"><strong>기록 관리</strong> — 기분, 체중, 태동, 검진 일정 한 번에</div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🏥</div>
+              <div class="feature-text"><strong>병원·제품 추천</strong> — 주소 기반 병원 검색과 준비물 가이드</div>
+            </div>
+          </div>
+          <div class="coming-soon-badge">
+            ⏳ Google Play 출시 예정
+          </div>
+        </div>
+        <div style="position:relative; z-index:1; display:flex; align-items:center; justify-content:center;">
+          <!-- 폰 목업 -->
+          <div style="width:220px; height:420px; background:linear-gradient(180deg,#0F2D6B,#1A3A8A); border-radius:36px; border:2px solid rgba(255,255,255,0.15); padding:20px 14px; display:flex; flex-direction:column; gap:10px; box-shadow:0 32px 64px rgba(0,0,0,0.4);">
+            <div style="background:#0A1F44; border-radius:16px; padding:14px; flex-shrink:0;">
+              <div style="font-size:9px; color:#7AADF0; margin-bottom:4px;">24주 · 임신 중기</div>
+              <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:2px;">안녕하세요! 😊</div>
+              <div style="font-size:8px; color:#B8D0F7;">오늘도 건강한 하루 보내세요</div>
+              <div style="display:flex; gap:6px; margin-top:8px;">
+                <div style="background:#1A4399; border-radius:8px; padding:3px 8px; font-size:8px; color:#7AADF0;">D-120</div>
+                <div style="background:#1A4399; border-radius:8px; padding:3px 8px; font-size:8px; color:#7AADF0;">62.5kg</div>
+                <div style="background:#1A4399; border-radius:8px; padding:3px 8px; font-size:8px; color:#7AADF0;">검진 D-5</div>
+              </div>
+            </div>
+            <div style="background:rgba(255,255,255,0.08); border-radius:12px; padding:12px; border:1px solid rgba(219,233,255,0.2);">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <div style="width:24px; height:24px; background:#2B6BD6; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; flex-shrink:0;">✦</div>
+                <div style="background:rgba(219,233,255,0.2); border-radius:8px; padding:2px 8px; font-size:8px; color:#7AADF0; font-weight:700;">AI Care</div>
+              </div>
+              <div style="font-size:9px; font-weight:700; color:#fff; margin-bottom:4px;">24주 맞춤 케어 메시지</div>
+              <div style="font-size:8px; color:rgba(255,255,255,0.7); line-height:1.4;">철분제 복용을 시작해보세요. 다음 검진까지 D-5예요!</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.08); border-radius:12px; padding:10px; display:flex; gap:8px;">
+              <div style="flex:1; background:rgba(43,107,214,0.2); border-radius:8px; padding:8px; text-align:center;">
+                <div style="font-size:16px;">😊</div>
+                <div style="font-size:7px; color:#7AADF0; margin-top:2px;">좋아요</div>
+              </div>
+              <div style="flex:1; background:rgba(251,113,133,0.2); border-radius:8px; padding:8px; text-align:center;">
+                <div style="font-size:14px; font-weight:700; color:#FB7185;">8</div>
+                <div style="font-size:7px; color:#FB7185; margin-top:2px;">태동</div>
+              </div>
+              <div style="flex:1; background:rgba(5,150,105,0.2); border-radius:8px; padding:8px; text-align:center;">
+                <div style="font-size:11px; font-weight:700; color:#059669;">62.5</div>
+                <div style="font-size:7px; color:#059669; margin-top:2px;">kg</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coming Soon 카드 -->
+      <div class="placeholder-card">
+        <div class="placeholder-icon">🚀</div>
+        <div class="placeholder-text">
+          <strong style="color:var(--navy); display:block; margin-bottom:6px;">다음 앱 준비 중</strong>
+          더 많은 앱이 곧 출시될 예정이에요
+        </div>
+      </div>
+
+      <div class="placeholder-card">
+        <div class="placeholder-icon">💡</div>
+        <div class="placeholder-text">
+          <strong style="color:var(--navy); display:block; margin-bottom:6px;">아이디어 제안</strong>
+          불편한 것이 있다면 언제든 알려주세요
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 가치 섹션 -->
+<section id="values">
+  <div class="values">
+    <p class="section-label">About Us</p>
+    <h2 class="section-title">DataBun의 가치</h2>
+    <p class="section-sub">사용자 중심의 경험과 기술로<br/>일상의 문제를 해결합니다.</p>
+    <div class="values-grid">
+      <div class="value-item">
+        <div class="value-num">AI</div>
+        <div style="font-size:18px; font-weight:700; color:var(--navy); margin-bottom:8px;">기반 서비스</div>
+        <div class="value-label">최신 AI 기술을 활용해<br/>진짜 필요한 정보를 제공해요</div>
+      </div>
+      <div class="value-item">
+        <div class="value-num">UX</div>
+        <div style="font-size:18px; font-weight:700; color:var(--navy); margin-bottom:8px;">중심 설계</div>
+        <div class="value-label">복잡함을 걷어내고<br/>꼭 필요한 기능만 담아요</div>
+      </div>
+      <div class="value-item">
+        <div class="value-num">🔒</div>
+        <div style="font-size:18px; font-weight:700; color:var(--navy); margin-bottom:8px;">개인정보 보호</div>
+        <div class="value-label">사용자 데이터를 안전하게<br/>보호하는 것을 최우선으로 해요</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 연락처 -->
+<section class="contact" id="contact">
+  <h2>문의하기</h2>
+  <p>앱에 대한 문의, 피드백, 제안을 언제든 환영해요</p>
+  <a href="mailto:databun.official@gmail.com" class="contact-email">
+    ✉ databun.official@gmail.com
+  </a>
+</section>
+
+<!-- 푸터 -->
+<footer>
+  <div class="footer-logo">Data<span>Bun</span></div>
+  <div class="footer-copy">© 2025 DataBun. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
